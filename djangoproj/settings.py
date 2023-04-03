@@ -44,21 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'students.apps.StudentsConfig',
-    'profs.apps.ProfsConfig',
-    'adminApps.apps.AdminappsConfig',
     'rest_framework',
-    'modules.apps.ModulesConfig',
-    'sections.apps.SectionsConfig',
-    'schedules.apps.SchedulesConfig',
-    'classrooms.apps.ClassroomsConfig',
-    'absences.apps.AbsencesConfig',
-    'exclusions.apps.ExclusionsConfig',
-    'justifications.apps.JustificationsConfig',
-    'sessionApps.apps.SessionAppsConfig',
-    'profiles.apps.ProfilesConfig',
     'quizzy.apps.QuizzyConfig',
-    'authentication.apps.AuthenticationConfig',
     'djoser',
     'social_django',
 
@@ -68,9 +55,9 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081",
-    "http://127.0.0.1:8081",
-    "http://172.16.54.187:8080"
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+
 ]
 
 MIDDLEWARE = [

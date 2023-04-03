@@ -29,8 +29,8 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/auth/jwt', include('djoser.urls.jwt')),
     path('social-auth/', include('social_django.urls')),
-    # (/api/auth-token/token/login/) to login
-    # (/api/auth-token/token/logout/) to logout
+    # (/api/auth/token/login/) to login
+    # (/api/auth/token/logout/) to logout
     # /api/auth/password/reset/ to reset password
     # /api/auth/password/reset/confirm/ to confirm reset password
 
