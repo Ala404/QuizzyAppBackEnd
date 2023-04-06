@@ -10,7 +10,7 @@ These are the packages you need to install for this project:
 
 # 5.social-auth-app-django 5.2.0///for sigin in using social media accounts
 
-WEHEN YOU FIRST ENTER THE PRIJECT TYPE THESE COMMANDS:
+WEHEN YOU FIRST ENTER THE PROJECT TYPE THESE COMMANDS:
 
 # python manage.py makemigrations
 
