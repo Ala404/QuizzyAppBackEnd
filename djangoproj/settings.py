@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'rest_framework',
     'quizzy.apps.QuizzyConfig',
     'djoser',
@@ -158,7 +159,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
+       'SERIALIZERS': {
+        # 'user': 'C:/Users/AlaDin/Desktop/Quizzy/djangoQuizzy/quizzy/serializers.py',
+    },
     'PERMISSIONS': {
         'user_create': ['rest_framework.permissions.AllowAny'],
         'user_delete': ['rest_framework.permissions.IsAdminUser'],
@@ -175,6 +178,7 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.linkedin.LinkedinOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    
 ]
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-app-id'
@@ -188,3 +192,13 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = 'your-linkedin-app-id'
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'your-linkedin-app-secret'
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_emailaddress', 'r_liteprofile']
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+       
+    ]
+}
