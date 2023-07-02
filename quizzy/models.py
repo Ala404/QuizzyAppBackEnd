@@ -25,9 +25,13 @@ class Quiz(models.Model):
 class Question(models.Model):
     
     id_question = models.AutoField(primary_key=True)
+    
+    DIFFICULTY_LVL = (('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard'))
+    
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     question_image = models.ImageField(upload_to='question_images', blank=True)
+    difficulty = models.CharField(max_length=6, choices=DIFFICULTY_LVL, default='Easy')
     
     def __str__(self):
         return self.text
@@ -52,6 +56,9 @@ class UserProfile(AbstractUser):
     upload_to='profile_pictures', blank=True)
     #make user active 
     is_active = models.BooleanField(default=True)
+    email = models.EmailField(unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.username
@@ -63,7 +70,7 @@ class QuizResult(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     fastest_time = models.TimeField()
-    
+    correct_answers =models.IntegerField(default=0)
     
 
 

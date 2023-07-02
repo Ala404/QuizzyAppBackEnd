@@ -42,10 +42,15 @@ class LoginView(djoser_views.TokenCreateView):
     
     def post(self, request, *args, **kwargs):
         serializer = CustomTokenCreateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_200_OK)
+        if serializer.is_valid():
+            user = authenticate(
+                username=serializer.validated_data['username'],
+                password=serializer.validated_data['password']
+            )
+            token = Token.objects.get(user=user)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class CategoryList(ListCreateAPIView):
@@ -100,20 +105,40 @@ class QuestionList(ListCreateAPIView):
     serializer_class = QuestionSerializer
     # permission_classes = [IsAuthenticated]
     
+    #override the post method to accept array of question objects
+    def post(self, request, *args, **kwargs):
+        if isinstance(request.data, list):
+            for question in request.data:
+                serializer = QuestionSerializer(data=question)
+                if serializer.is_valid():
+                    serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return super().post(request, *args, **kwargs)
+        
+        
+    
 
 class QuestionDetail(RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
     # permission_classes = [IsAuthenticated]
-    
 
-class QuestionAnswerList(APIView):
+
+class QuestionDifficultyView(APIView):
     
     def get(self, request, *args, **kwargs):
-       answers = Answer.objects.filter(question=kwargs['pk2'])
-       serializer = AnswerSerializer(answers, many=True)
+       questions = Question.objects.filter(quiz=kwargs['pk'], difficulty=kwargs['difficulty'])
+       serializer = QuestionSerializer(questions, many=True, context={'request': request})
        return Response(serializer.data)
-    
+
+
+class QuizAnswersView(APIView):
+    def get(self, request, pk):
+        answers = Answer.objects.filter(question__quiz=pk)
+        serialized_answers = AnswerSerializer(answers, many=True)
+        return Response(serialized_answers.data)
+
 
 # only authenticated admin users can add and modify answers
 class AnswerList(ListCreateAPIView):
@@ -140,11 +165,11 @@ class QuizResultDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = QuizResultSerializer
     # permission_classes = [IsAuthenticated]
     #override post method to get user id from token and save it to the quiz result
-    def post(self, request, *args, **kwargs):
-        token = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
-        user = Token.objects.get(key=token).user
-        request.data['user'] = user.id
-        return super().post(request, *args, **kwargs)   
+    # def post(self, request, *args, **kwargs):
+    #     token = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
+    #     user = Token.objects.get(key=token).user
+    #     request.data['user'] = user.id
+    #     return super().post(request, *args, **kwargs)   
 
 
 # only authenticated admin users can view, add and modify notifications
